@@ -1,0 +1,23 @@
+select distinct zn.Дата
+,nz.doma as 'НЗ'
+,nn.doma as 'НН'
+,zn.doma as 'ЗН'
+,zz.doma as 'ЗЗ'
+,v.doma as 'В'
+,100-sp.gost as 'СП',zn.Дома,zn.Дома_Голы,zn.В_гостях_Голы,zn.Условия_победы
+,zn.В_гостях
+
+,nz.gost as 'НЗ'
+,nn.gost as 'НН'
+,zn.gost as 'ЗН'
+,zz.gost as 'ЗЗ'
+,v.gost as 'В'
+,sp.gost as 'СП'
+
+
+from zach_v_nap zn
+inner join zach_v_zach zz on zz.Дома=zn.Дома and zz.Дата=zn.Дата
+inner join nap_v_nap nn on nn.Дома=zn.Дома and nn.Дата=zn.Дата
+inner join nap_v_zach nz on nz.Дома=zn.Дома and nz.Дата=zn.Дата
+inner join vrat v on v.Дома=zn.Дома and v.Дата=zn.Дата
+inner join sp_all sp on sp.Дома=zn.Дома and sp.Дата=zn.Дата

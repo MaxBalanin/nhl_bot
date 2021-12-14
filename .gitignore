@@ -139,4 +139,5 @@ dmypy.json
 cython_debug/
 /config.py
 /.idea/
-
+/bases/data/database.db
+/bases/sql/

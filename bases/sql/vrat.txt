@@ -1,0 +1,23 @@
+select tt.Дата
+, tt.Дома
+,case when d."1"< dd."2" then '65' else '35'end as home
+,tt.Дома_Голы
+,tt.В_гостях_Голы
+,tt.Условия_победы
+,tt.В_гостях
+,case when d."1"> dd."2" then '65'else '35' end as gost
+from time_table tt
+inner join (
+select ps.Команда
+,min(substr((cast(ps."Пропущеные" as float)/cast(ps.Игры as float)),1,4) ) as '1'
+from players_stats ps
+where cast(ps."Пропущеные" as int)>1
+and cast(ps.Игры as int)>10
+group by ps.Команда) d on d.Команда=tt.Дома
+inner join (
+select ps.Команда
+,min(substr((cast(ps."Пропущеные" as float)/cast(ps.Игры as float)),1,4) ) as '2'
+from players_stats ps
+where cast(ps."Пропущеные" as int)>1
+and cast(ps.Игры as int)>10
+group by ps.Команда) dd on dd.Команда=tt.В_гостях

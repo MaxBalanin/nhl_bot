@@ -1,0 +1,81 @@
+
+select *
+from
+(select dd.Дата,dd.Дома
+,dd."1"+dd."2"+dd."3"+dd."4"+dd."5"+dd."6"+dd."7"+dd."8"+dd."9"+dd."10"+dd."11"+dd."12" as doma
+,dd.Дома_Голы,dd.В_гостях_Голы,dd.Условия_победы,dd.В_гостях
+,100-(dd."1"+dd."2"+dd."3"+dd."4"+dd."5"+dd."6"+dd."7"+dd."8"+dd."9"+dd."10"+dd."11"+dd."12") as gost
+from
+(
+select d.Дата,d.Дома,d.Дома_Голы,d.В_гостях_Голы,d.Условия_победы,d.В_гостях
+,case when d."11">d."1" then '15' else '0' end as '1'
+,case when d."22">d."2" then '10' else '0' end as '2'
+,case when d."33">d."3" then '5' else '0' end as '3'
+,case when d."44">d."4" then '5' else '0' end as '4'
+,case when d."55">d."5" then '20' else '0' end as '5'
+,case when d."66"<d."6" then '5' else '0' end as '6'
+--,case when d."77">d."7" then '5' else d.В_гостях end
+,case when d."88">d."8" then '5' else '0' end as '7'
+,case when d."99"<d."9" then '10' else '0' end as '8'
+,case when d."1010"<d."10" then '5' else '0' end as '9'
+,case when d."1111">d."11" then '5' else '0' end as '10'
+,case when d."1212">d."12" then '10' else '0' end as '11'
+,case when d."1313"<d."13" then '0' else '0' end as '12'
+
+
+from (
+select *
+from time_table tt
+inner join
+(SELECT distinct
+case
+when new.Команда='Аризона Койотис' then 'Аризона Койотс'
+when new.Команда='Нэшвилл Предэйторз' then 'Нэшвилл Предаторз'
+when new.Команда='Нью-Джерси Девилз' then 'Нью-Джерси Дэвилз'
+when new.Команда='Чикаго Блэкхокс' then 'Чикаго Блэкхоукс'
+ELSE new.Команда
+end as 'Команда'
+,SUM(substr((cast(new.Очки as float)/cast(new.Игры as float)),1,4)) as '11'
+,SUM(substr((cast(new.Голы as float)/cast(new.Игры as float)),1,4)) as '22'
+,SUM(substr((cast(new.Передачи as float)/cast(new.Игры as float)),1,4)) as '33'
+,SUM(substr((cast(new.Броски_в_створ_ворот as float)/cast(new.Игры as float)),1,4)) as '44'
+,SUM(substr((cast(new.Реализация_бросков_голы_броски as float)/cast(new.Игры as float)),1,4)) as '55'
+,SUM(substr((cast(new.Штрафные_минуты as float)/cast(new.Игры as float)),1,4)) as '66'
+,SUM(substr((cast(new.Время_на_площадке as float)/cast(new.Игры as float)),1,4)) as '77'
+,SUM(substr((cast(new.Отборы_шайбы as float)/cast(new.Игры as float)),1,4)) as '88'
+,SUM(substr((cast(new.Потери_шайбы as float)/cast(new.Игры as float)),1,4)) as '99'
+,SUM(substr((cast(new.Силовые_приемы as float)/cast(new.Игры as float)),1,4)) as '1010'
+,SUM(substr((cast(new.Блокированные_броски as float)/cast(new.Игры as float)),1,4)) as '1111'
+,SUM(substr((cast(new.Выигранные_вбрасывания as float)/cast(new.Игры as float)),1,4)) as '1212'
+,SUM(substr((cast(new.Проигранные_вбрасывания as float)/cast(new.Игры as float)),1,4)) as '1313'
+
+FROM players_stats_2 new
+where new.Амплуа_игрока in ('Ц','П','Л')
+AND NEW.Игрок not in ('Комаров Лео')
+GROUP BY new.Команда) wgk on wgk.Команда=tt.Дома
+inner join (SELECT distinct
+case
+when new.Команда='Аризона Койотис' then 'Аризона Койотс'
+when new.Команда='Нэшвилл Предэйторз' then 'Нэшвилл Предаторз'
+when new.Команда='Нью-Джерси Девилз' then 'Нью-Джерси Дэвилз'
+when new.Команда='Чикаго Блэкхокс' then 'Чикаго Блэкхоукс'
+ELSE new.Команда
+end as 'Команда'
+,SUM(substr((cast(new.Очки as float)/cast(new.Игры as float)),1,4)) as '1'
+,SUM(substr((cast(new.Голы as float)/cast(new.Игры as float)),1,4)) as '2'
+,SUM(substr((cast(new.Передачи as float)/cast(new.Игры as float)),1,4)) as '3'
+,SUM(substr((cast(new.Броски_в_створ_ворот as float)/cast(new.Игры as float)),1,4)) as '4'
+,SUM(substr((cast(new.Реализация_бросков_голы_броски as float)/cast(new.Игры as float)),1,4)) as '5'
+,SUM(substr((cast(new.Штрафные_минуты as float)/cast(new.Игры as float)),1,4)) as '6'
+,SUM(substr((cast(new.Время_на_площадке as float)/cast(new.Игры as float)),1,4)) as '7'
+,SUM(substr((cast(new.Отборы_шайбы as float)/cast(new.Игры as float)),1,4)) as '8'
+,SUM(substr((cast(new.Потери_шайбы as float)/cast(new.Игры as float)),1,4)) as '9'
+,SUM(substr((cast(new.Силовые_приемы as float)/cast(new.Игры as float)),1,4)) as '10'
+,SUM(substr((cast(new.Блокированные_броски as float)/cast(new.Игры as float)),1,4)) as '11'
+,SUM(substr((cast(new.Выигранные_вбрасывания as float)/cast(new.Игры as float)),1,4)) as '12'
+,SUM(substr((cast(new.Проигранные_вбрасывания as float)/cast(new.Игры as float)),1,4))as '13'
+
+FROM players_stats_2 new
+where new.Амплуа_игрока in ('Ц','П','Л')
+AND NEW.Игрок not in ('Комаров Лео')
+GROUP BY new.Команда) p on p.Команда=tt.В_гостях) d) dd)

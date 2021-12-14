@@ -1,0 +1,26 @@
+SELECT distinct
+case
+when new.Команда='Аризона Койотис' then 'Аризона Койотс'
+when new.Команда='Нэшвилл Предэйторз' then 'Нэшвилл Предаторз'
+when new.Команда='Нью-Джерси Девилз' then 'Нью-Джерси Дэвилз'
+when new.Команда='Чикаго Блэкхокс' then 'Чикаго Блэкхоукс'
+ELSE new.Команда
+end
+,SUM(substr((cast(new.Очки as float)/cast(new.Игры as float)),1,4))
+,SUM(substr((cast(new.Голы as float)/cast(new.Игры as float)),1,4))
+,SUM(substr((cast(new.Передачи as float)/cast(new.Игры as float)),1,4))
+,SUM(substr((cast(new.Броски_в_створ_ворот as float)/cast(new.Игры as float)),1,4))
+,SUM(substr((cast(new.Реализация_бросков_голы_броски as float)/cast(new.Игры as float)),1,4))
+,SUM(substr((cast(new.Штрафные_минуты as float)/cast(new.Игры as float)),1,4))
+,SUM(substr((cast(new.Время_на_площадке as float)/cast(new.Игры as float)),1,4))
+,SUM(substr((cast(new.Отборы_шайбы as float)/cast(new.Игры as float)),1,4))
+,SUM(substr((cast(new.Потери_шайбы as float)/cast(new.Игры as float)),1,4))
+,SUM(substr((cast(new.Силовые_приемы as float)/cast(new.Игры as float)),1,4))
+,SUM(substr((cast(new.Блокированные_броски as float)/cast(new.Игры as float)),1,4))
+,SUM(substr((cast(new.Выигранные_вбрасывания as float)/cast(new.Игры as float)),1,4))
+,SUM(substr((cast(new.Проигранные_вбрасывания as float)/cast(new.Игры as float)),1,4))
+
+FROM players_stats_2 new
+where new.Амплуа_игрока in ('Ц','П','Л')
+AND NEW.Игрок not in ('Комаров Лео')
+GROUP BY new.Команда
